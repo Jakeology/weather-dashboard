@@ -57,6 +57,17 @@ header {
   width: 100%;
 }
 
+.recent-btn {
+  font-size: 24px;
+  background-color: #b4b4b4;
+  border-radius: 10px;
+  padding: 5px;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  width: 100%;
+}
+
 .results-container {
   width: 57em;
 }
@@ -76,3 +87,10 @@ header {
 .hide {
   display: none;
 }
+
+@media screen and (max-width: 1440px) {
+  /* .search-container {
+    display: none;
+  } */
+}
+

@@ -3,6 +3,7 @@ var cityNameInput = document.getElementById("city-input");
 
 var cityData = {};
 var weatherData = {};
+var recentSearchesData = [];
 
 function getCity(city) {
   var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&appid=05d022c22c687fddb635d7cf8a4c9afb";
@@ -13,6 +14,7 @@ function getCity(city) {
         response.json().then(function (data) {
           cityData = data;
           getWeatherData(data[0].lat, data[0].lon);
+          saveRecentSearches(data[0].name + ", " + data[0].state);
         });
       } else {
         alert("Invalid city!");
@@ -58,13 +60,51 @@ function searchHandler(event) {
   }
 }
 
+function saveRecentSearches(city) {
+  if (!recentSearchesData.includes(city)) {
+    if (recentSearchesData.length >= 5) {
+      recentSearchesData.splice(0, 1);
+    }
+    recentSearchesData.push(city);
+    localStorage.setItem("recentSearches", JSON.stringify(recentSearchesData));
+    displayRecentButtons();
+  }
+}
+
+var loadRecentSearches = function () {
+    if (!localStorage.length) {
+      return;
+    }
+  
+    recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
+    displayRecentButtons();
+  };
+
+function displayRecentButtons() {
+  var reversedData = [...recentSearchesData];
+  reversedData.reverse();
+
+  var recentSearchesCont = document.getElementById("recent-searches");
+  if (recentSearchesCont) {
+    recentSearchesCont.innerHTML = "";
+  }
+  for (var i = 0; i < recentSearchesData.length; i++) {
+    var button = document.createElement("button");
+    var buttonText = reversedData[i];
+    button.type = "submit";
+    button.className = "recent-btn";
+    button.textContent = buttonText;
+    recentSearchesCont.appendChild(button);
+  }
+}
+
 function displayCurrentResults() {
   $(".results-container").removeClass("hide");
 
   var getCityName = document.getElementById("card-title");
   var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
 
-  getCityName.textContent = "Viewing weather for " + cityData[0].name + " " + date;
+  getCityName.textContent = "Viewing weather for " + cityData[0].name + ", " + cityData[0].state + " " + date;
 
   var currentIcon = document.getElementById("current-icon");
 
@@ -163,5 +203,7 @@ function displayFutureForecast() {
     body.appendChild(humidity);
   }
 }
+
+loadRecentSearches();
 
 searchButton.addEventListener("click", searchHandler);
