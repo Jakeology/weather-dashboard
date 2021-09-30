@@ -12,9 +12,13 @@ function getCity(city) {
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          cityData = data;
-          getWeatherData(data[0].lat, data[0].lon);
-          saveRecentSearches(data[0].name + ", " + data[0].state);
+          if (!jQuery.isEmptyObject(data)) {
+            cityData = data;
+            getWeatherData(data[0].lat, data[0].lon);
+            saveRecentSearches(data[0].name + ", " + data[0].state);
+          } else {
+            alert("invalid city");
+          }
         });
       } else {
         alert("Invalid city!");
@@ -133,6 +137,10 @@ function displayCurrentResults() {
   img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
   currentIcon.appendChild(img);
 
+  var p = document.createElement("p");
+  p.textContent = weatherData.current.weather[0].main;
+  currentIcon.appendChild(p);
+
   var currentForecast = document.getElementById("current-body");
 
   if (currentForecast) {
@@ -216,8 +224,6 @@ function displayFutureForecast() {
     humidity.className = "card-text";
     humidity.textContent = "Humidity: " + weatherData.daily[i].humidity + "%";
     body.appendChild(humidity);
-
-
   }
 }
 
