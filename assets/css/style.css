@@ -24,6 +24,26 @@ header {
   font-family: "Fredoka One", Sans-serif;
 }
 
+.tippy-box[data-theme~='error'] {
+  background-color: #d44d35;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tippy-box[data-theme~='error'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #d44d35;
+}
+.tippy-box[data-theme~='error'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #d44d35;
+}
+.tippy-box[data-theme~='error'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #d44d35;
+}
+.tippy-box[data-theme~='error'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #d44d35;
+}
+
 .content {
   display: flex;
   flex-wrap: wrap;

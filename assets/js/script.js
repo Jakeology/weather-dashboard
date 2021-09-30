@@ -1,9 +1,12 @@
+
 var mainContainer = document.getElementById("content");
 var cityNameInput = document.getElementById("city-input");
 
 var cityData = {};
 var weatherData = {};
 var recentSearchesData = [];
+
+var errorColor = false;
 
 function getCity(city) {
   var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&appid=05d022c22c687fddb635d7cf8a4c9afb";
@@ -13,11 +16,27 @@ function getCity(city) {
       if (response.ok) {
         response.json().then(function (data) {
           if (!jQuery.isEmptyObject(data)) {
+            if(errorColor) {
+              errorColor = false;
+              cityNameInput.style.borderColor = "#808080";
+            }
             cityData = data;
             getWeatherData(data[0].lat, data[0].lon);
             saveRecentSearches(data[0].name + ", " + data[0].state);
           } else {
-            alert("invalid city");
+            var instance = tippy(cityNameInput);
+            instance.setProps({
+              arrow: true,
+              placement: "bottom",
+              content: "Invalid City!",
+              trigger: "none",
+              theme: "error",
+            });
+            instance.show();
+            if(!errorColor) {
+              cityNameInput.style.borderColor = "#d44d35";
+              errorColor = true;
+            }
           }
         });
       } else {
