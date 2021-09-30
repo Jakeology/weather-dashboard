@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css?family=Varela Round");
+@import url("https://fonts.googleapis.com/css?family=Fredoka One");
+
+:root {
+  --primaryColor: #2c335e;
+  --textColor: white;
+  --border-radius: 0.3rem;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  background-color: var(--primaryColor);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-family: "Fredoka One", Sans-serif;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 5em;
+}
+
+.search-container {
+  width: 20em;
+  margin-right: 3em;
+}
+
+.form-label {
+  font-size: 34px;
+}
+
+.form-input {
+  outline: none;
+  border: none;
+  font-size: 24px;
+  padding: 5px;
+  border: 2px solid #808080;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.btn {
+  font-size: 28px;
+  background-color: var(--primaryColor);
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.results-container {
+  width: 57em;
+}
+
+.forecast {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 3em;
+}
+
+.forecast-card {
+  width: 16em;
+  margin-bottom: 1em;
+}
+
+.hide {
+  display: none;
+}
