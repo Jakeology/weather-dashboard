@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css?family=Varela Round");
+@import url("https://fonts.googleapis.com/css?family=Fredoka One");
+
+:root {
+  --primaryColor: #2c335e;
+  --textColor: white;
+  --border-radius: 0.3rem;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  background-color: var(--primaryColor);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-family: "Fredoka One", Sans-serif;
+}
