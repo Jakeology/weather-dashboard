@@ -213,7 +213,7 @@ function displayFutureForecast() {
     var weatherIconId = weatherData.daily[i].weather[0].icon;
 
     var img = document.createElement("img");
-    img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
+    img.src = "https://openweathermap.org/img/w/" + weatherIconId + ".png";
     icon.appendChild(img);
 
     var p = document.createElement("p");
