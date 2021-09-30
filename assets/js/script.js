@@ -1,8 +1,12 @@
-var searchButton = document.getElementById("city-search");
+
+var mainContainer = document.getElementById("content");
 var cityNameInput = document.getElementById("city-input");
 
 var cityData = {};
 var weatherData = {};
+var recentSearchesData = [];
+
+var errorColor = false;
 
 function getCity(city) {
   var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&appid=05d022c22c687fddb635d7cf8a4c9afb";
@@ -11,8 +15,32 @@ function getCity(city) {
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          cityData = data;
-          getWeatherData(data[0].lat, data[0].lon);
+          if (!jQuery.isEmptyObject(data)) {
+
+            cityNameInput.value = "";
+
+            if(errorColor) {
+              errorColor = false;
+              cityNameInput.style.borderColor = "#808080";
+            }
+            cityData = data;
+            getWeatherData(data[0].lat, data[0].lon);
+            saveRecentSearches(data[0].name + ", " + data[0].state);
+          } else {
+            var instance = tippy(cityNameInput);
+            instance.setProps({
+              arrow: true,
+              placement: "bottom",
+              content: "Invalid City!",
+              trigger: "none",
+              theme: "error",
+            });
+            instance.show();
+            if(!errorColor) {
+              cityNameInput.style.borderColor = "#d44d35";
+              errorColor = true;
+            }
+          }
         });
       } else {
         alert("Invalid city!");
@@ -47,24 +75,76 @@ function getWeatherData(lat, lon) {
     });
 }
 
-function searchHandler(event) {
-  event.preventDefault();
-  // get value from input element
-  var city = cityNameInput.value.trim();
+function buttonClick(event) {
+  var target = event.target;
 
-  if (city) {
-    getCity(city);
-    cityNameInput.value = "";
+  if (target.matches("#city-search")) {
+    var city = cityNameInput.value.trim();
+    if (city) {
+      getCity(city);
+    }
+  }
+
+  if (target.matches(".recent-btn")) {
+    var getClickedCity = target.innerHTML;
+
+    getCity(getClickedCity);
+  }
+}
+
+function saveRecentSearches(city) {
+  if (!recentSearchesData.includes(city)) {
+    if (recentSearchesData.length >= 5) {
+      recentSearchesData.splice(0, 1);
+    }
+    recentSearchesData.push(city);
+    localStorage.setItem("recentSearches", JSON.stringify(recentSearchesData));
+    displayRecentButtons();
+  }
+}
+
+var loadRecentSearches = function () {
+  if (!localStorage.length) {
+    return;
+  }
+
+  recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
+
+  displayRecentButtons();
+};
+
+function displayRecentButtons() {
+  var reversedData = [...recentSearchesData];
+  reversedData.reverse();
+
+  var recentSearchesCont = document.getElementById("recent-searches");
+
+  if (recentSearchesCont) {
+    recentSearchesCont.innerHTML = "";
+  }
+
+  if (recentSearchesData) {
+    recentSearchesCont.className = "recent-searches";
+  }
+
+  for (var i = 0; i < recentSearchesData.length; i++) {
+    var button = document.createElement("button");
+    var buttonText = reversedData[i];
+    button.type = "submit";
+    button.className = "recent-btn";
+    button.textContent = buttonText;
+    recentSearchesCont.appendChild(button);
   }
 }
 
 function displayCurrentResults() {
   $(".results-container").removeClass("hide");
+  $(".welcome-screen").addClass("hide");
 
   var getCityName = document.getElementById("card-title");
   var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
 
-  getCityName.textContent = "Viewing weather for " + cityData[0].name + " " + date;
+  getCityName.textContent = "Viewing weather for " + cityData[0].name + ", " + cityData[0].state + " (" + date + ")";
 
   var currentIcon = document.getElementById("current-icon");
 
@@ -77,6 +157,10 @@ function displayCurrentResults() {
   var img = document.createElement("img");
   img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
   currentIcon.appendChild(img);
+
+  var p = document.createElement("p");
+  p.textContent = weatherData.current.weather[0].main;
+  currentIcon.appendChild(p);
 
   var currentForecast = document.getElementById("current-body");
 
@@ -164,4 +248,6 @@ function displayFutureForecast() {
   }
 }
 
-searchButton.addEventListener("click", searchHandler);
+loadRecentSearches();
+
+mainContainer.addEventListener("click", buttonClick);
