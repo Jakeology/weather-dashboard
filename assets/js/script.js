@@ -1,4 +1,4 @@
-var searchButton = document.getElementById("city-search");
+var mainContainer = document.getElementById("content");
 var cityNameInput = document.getElementById("city-input");
 
 var cityData = {};
@@ -49,14 +49,21 @@ function getWeatherData(lat, lon) {
     });
 }
 
-function searchHandler(event) {
-  event.preventDefault();
-  // get value from input element
-  var city = cityNameInput.value.trim();
+function buttonClick(event) {
+  var target = event.target;
 
-  if (city) {
-    getCity(city);
-    cityNameInput.value = "";
+  if (target.matches("#city-search")) {
+    var city = cityNameInput.value.trim();
+    if (city) {
+      getCity(city);
+      cityNameInput.value = "";
+    }
+  }
+
+  if (target.matches(".recent-btn")) {
+    var getClickedCity = target.innerHTML;
+
+    getCity(getClickedCity);
   }
 }
 
@@ -72,15 +79,14 @@ function saveRecentSearches(city) {
 }
 
 var loadRecentSearches = function () {
-
   if (!localStorage.length) {
     return;
   }
 
   recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
-  
+
   var getLastCity = recentSearchesData.slice(-1).pop();
-  
+
   getCity(getLastCity);
 
   displayRecentButtons();
@@ -213,9 +219,11 @@ function displayFutureForecast() {
     humidity.className = "card-text";
     humidity.textContent = "Humidity: " + weatherData.daily[i].humidity + "%";
     body.appendChild(humidity);
+
+
   }
 }
 
 loadRecentSearches();
 
-searchButton.addEventListener("click", searchHandler);
+mainContainer.addEventListener("click", buttonClick);
