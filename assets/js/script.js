@@ -13,8 +13,6 @@ function getCity(city) {
         response.json().then(function (data) {
           cityData = data;
           getWeatherData(data[0].lat, data[0].lon);
-          //TODO REMOVE CONSOLE LOG
-          console.log(data);
         });
       } else {
         alert("Invalid city!");
@@ -38,7 +36,6 @@ function getWeatherData(lat, lon) {
       if (response.ok) {
         response.json().then(function (data) {
           weatherData = data;
-          console.log(data);
           displayCurrentResults();
         });
       } else {
@@ -114,7 +111,57 @@ function displayCurrentResults() {
     currentIndex.innerHTML = "UV Index: <span class='badge bg-danger'>" + index + "</span>";
   }
   currentForecast.appendChild(currentIndex);
-  
+  displayFutureForecast();
+}
+
+function displayFutureForecast() {
+  for (var i = 1; i <= 5; i++) {
+    var header = document.getElementById("forecast-header-" + i);
+    var date = moment.unix(weatherData.daily[i].dt).format("MM/DD/YYYY");
+    header.textContent = date;
+
+    var icon = document.getElementById("forecast-icon-" + i);
+
+    if (icon) {
+      icon.innerHTML = "";
+    }
+
+    var weatherIconId = weatherData.daily[i].weather[0].icon;
+
+    var img = document.createElement("img");
+    img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
+    icon.appendChild(img);
+
+    var p = document.createElement("p");
+    p.textContent = weatherData.daily[i].weather[0].main;
+    icon.appendChild(p);
+
+    var body = document.getElementById("forecast-body-" + i);
+
+    if (body) {
+      body.innerHTML = "";
+    }
+
+    var temp = document.createElement("h5");
+    temp.className = "card-text";
+    temp.textContent =
+      "H:" +
+      Math.round(weatherData.daily[i].feels_like.day) +
+      "° L:" +
+      Math.round(weatherData.daily[i].feels_like.night) +
+      "°";
+    body.appendChild(temp);
+
+    var wind = document.createElement("h5");
+    wind.className = "card-text";
+    wind.textContent = "Wind: " + Math.round(10 * weatherData.daily[i].wind_speed) / 10 + "MPH";
+    body.appendChild(wind);
+
+    var humidity = document.createElement("h5");
+    humidity.className = "card-text";
+    humidity.textContent = "Humidity: " + weatherData.daily[i].humidity + "%";
+    body.appendChild(humidity);
+  }
 }
 
 searchButton.addEventListener("click", searchHandler);
