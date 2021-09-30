@@ -72,6 +72,12 @@ header {
   width: 57em;
 }
 
+.recent-searches {
+  border-top: 2px solid #b4b4b4;
+  margin: 20px 0 20px 0;
+  width: 100%;
+}
+
 .forecast {
   display: flex;
   flex-wrap: wrap;

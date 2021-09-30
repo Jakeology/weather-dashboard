@@ -72,22 +72,28 @@ function saveRecentSearches(city) {
 }
 
 var loadRecentSearches = function () {
-    if (!localStorage.length) {
-      return;
-    }
-  
-    recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
-    displayRecentButtons();
-  };
+  if (!localStorage.length) {
+    return;
+  }
+
+  recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
+  displayRecentButtons();
+};
 
 function displayRecentButtons() {
   var reversedData = [...recentSearchesData];
   reversedData.reverse();
 
   var recentSearchesCont = document.getElementById("recent-searches");
+
   if (recentSearchesCont) {
     recentSearchesCont.innerHTML = "";
   }
+
+  if (recentSearchesData) {
+    recentSearchesCont.className = "recent-searches";
+  }
+
   for (var i = 0; i < recentSearchesData.length; i++) {
     var button = document.createElement("button");
     var buttonText = reversedData[i];
