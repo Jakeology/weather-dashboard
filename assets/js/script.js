@@ -72,11 +72,17 @@ function saveRecentSearches(city) {
 }
 
 var loadRecentSearches = function () {
+
   if (!localStorage.length) {
     return;
   }
 
   recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
+  
+  var getLastCity = recentSearchesData.slice(-1).pop();
+  
+  getCity(getLastCity);
+
   displayRecentButtons();
 };
 
