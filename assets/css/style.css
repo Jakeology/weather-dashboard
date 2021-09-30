@@ -56,3 +56,23 @@ header {
   margin-top: 10px;
   width: 100%;
 }
+
+.results-container {
+  width: 57em;
+}
+
+.forecast {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 3em;
+}
+
+.forecast-card {
+  width: 16em;
+  margin-bottom: 1em;
+}
+
+.hide {
+  display: none;
+}
