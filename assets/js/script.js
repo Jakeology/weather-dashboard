@@ -155,7 +155,7 @@ function displayCurrentResults() {
   var weatherIconId = weatherData.current.weather[0].icon;
 
   var img = document.createElement("img");
-  img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
+  img.src = "https://openweathermap.org/img/w/" + weatherIconId + ".png";
   currentIcon.appendChild(img);
 
   var p = document.createElement("p");
