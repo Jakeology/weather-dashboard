@@ -68,6 +68,53 @@ function displayCurrentResults() {
   var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
 
   getCityName.textContent = "Viewing weather for " + cityData[0].name + " " + date;
+
+  var currentIcon = document.getElementById("current-icon");
+
+  if (currentIcon) {
+    currentIcon.innerHTML = "";
+  }
+
+  var weatherIconId = weatherData.current.weather[0].icon;
+
+  var img = document.createElement("img");
+  img.src = "http://openweathermap.org/img/w/" + weatherIconId + ".png";
+  currentIcon.appendChild(img);
+
+  var currentForecast = document.getElementById("current-body");
+
+  if (currentForecast) {
+    currentForecast.innerHTML = "";
+  }
+
+  var currentTemp = document.createElement("h5");
+  currentTemp.textContent =
+    "H:" +
+    Math.round(weatherData.daily[0].feels_like.day) +
+    "° L:" +
+    Math.round(weatherData.daily[0].feels_like.night) +
+    "°";
+  currentForecast.appendChild(currentTemp);
+
+  var currentWind = document.createElement("h5");
+  currentWind.textContent = "Wind: " + Math.round(10 * weatherData.current.wind_speed) / 10 + " MPH";
+  currentForecast.appendChild(currentWind);
+
+  var currentHumidity = document.createElement("h5");
+  currentHumidity.textContent = "Humidity: " + weatherData.current.humidity + "%";
+  currentForecast.appendChild(currentHumidity);
+
+  var currentIndex = document.createElement("h5");
+  var index = weatherData.current.uvi;
+  if (index <= 3) {
+    currentIndex.innerHTML = "UV Index: <span class='badge bg-success'>" + index + "</span>";
+  } else if (index <= 6) {
+    currentIndex.innerHTML = "UV Index: <span class='badge bg-warning'>" + index + "</span>";
+  } else {
+    currentIndex.innerHTML = "UV Index: <span class='badge bg-danger'>" + index + "</span>";
+  }
+  currentForecast.appendChild(currentIndex);
+  
 }
 
 searchButton.addEventListener("click", searchHandler);
