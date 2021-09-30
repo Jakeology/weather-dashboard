@@ -61,9 +61,10 @@ header {
 }
 
 .search-container {
-  min-width: 15em;
+  min-width: 15.5em;
   width: 20em;
   margin: 0 3em;
+  margin-bottom: 3em;
 }
 
 .form-label {
@@ -104,7 +105,6 @@ header {
 
 .results-container {
   width: 62.5em;
-  margin-bottom: 3em;
 }
 
 .current-card {
@@ -132,13 +132,28 @@ header {
   width: 12em;
 }
 
+.card-header {
+  background-color: var(--primaryColor);
+  color: white;
+}
+
+.card-header:first-child {
+  border-top-left-radius: 0.75em;
+  border-top-right-radius: 0.75em;
+}
+
+.card {
+  border-radius: 0.75em;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
 .hide {
   display: none;
 }
 
-@media screen and (max-width: 1440px) {
-  /* .search-container {
-    display: none;
-  } */
+@media screen and (max-width: 544px) {
+  .forecast-header {
+    text-align: center;
+  }
 }
 

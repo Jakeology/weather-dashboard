@@ -16,6 +16,9 @@ function getCity(city) {
       if (response.ok) {
         response.json().then(function (data) {
           if (!jQuery.isEmptyObject(data)) {
+
+            cityNameInput.value = "";
+
             if(errorColor) {
               errorColor = false;
               cityNameInput.style.borderColor = "#808080";
@@ -79,7 +82,6 @@ function buttonClick(event) {
     var city = cityNameInput.value.trim();
     if (city) {
       getCity(city);
-      cityNameInput.value = "";
     }
   }
 
@@ -142,7 +144,7 @@ function displayCurrentResults() {
   var getCityName = document.getElementById("card-title");
   var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
 
-  getCityName.textContent = "Viewing weather for " + cityData[0].name + ", " + cityData[0].state + " " + date;
+  getCityName.textContent = "Viewing weather for " + cityData[0].name + ", " + cityData[0].state + " (" + date + ")";
 
   var currentIcon = document.getElementById("current-icon");
 
