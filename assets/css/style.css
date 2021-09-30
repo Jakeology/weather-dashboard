@@ -12,6 +12,10 @@
   margin: 0;
 }
 
+main {
+  font-family: "Varela Round", Sans-serif;
+}
+
 header {
   background-color: var(--primaryColor);
   color: white;
@@ -25,6 +29,15 @@ header {
   flex-wrap: wrap;
   justify-content: center;
   margin: 5em;
+}
+
+.welcome-screen {
+  width: 62.5em;
+  text-align: center;
+}
+
+.welcome-screen p {
+  font-size: 20px;
 }
 
 .search-container {
@@ -70,7 +83,16 @@ header {
 }
 
 .results-container {
-  width: 57em;
+  width: 62.5em;
+  margin-bottom: 3em;
+}
+
+.current-card {
+  margin-bottom: 3em;
+}
+
+.forecast-header {
+  font-weight: bold;
 }
 
 .recent-searches {
@@ -83,12 +105,11 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-top: 3em;
 }
 
 .forecast-card {
-  width: 16em;
   margin-bottom: 1em;
+  width: 12em;
 }
 
 .hide {

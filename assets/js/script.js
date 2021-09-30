@@ -85,10 +85,6 @@ var loadRecentSearches = function () {
 
   recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
 
-  var getLastCity = recentSearchesData.slice(-1).pop();
-
-  getCity(getLastCity);
-
   displayRecentButtons();
 };
 
@@ -118,6 +114,7 @@ function displayRecentButtons() {
 
 function displayCurrentResults() {
   $(".results-container").removeClass("hide");
+  $(".welcome-screen").addClass("hide");
 
   var getCityName = document.getElementById("card-title");
   var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
