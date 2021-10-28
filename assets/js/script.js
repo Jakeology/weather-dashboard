@@ -1,12 +1,11 @@
+const mainContainer = document.getElementById("content");
+const cityNameInput = document.getElementById("city-input");
 
-var mainContainer = document.getElementById("content");
-var cityNameInput = document.getElementById("city-input");
+let cityData = {};
+let weatherData = {};
+let recentSearchesData = [];
 
-var cityData = {};
-var weatherData = {};
-var recentSearchesData = [];
-
-var errorColor = false;
+let errorColor = false;
 
 function getCity(city) {
   var apiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&appid=05d022c22c687fddb635d7cf8a4c9afb";
@@ -16,10 +15,9 @@ function getCity(city) {
       if (response.ok) {
         response.json().then(function (data) {
           if (!jQuery.isEmptyObject(data)) {
-
             cityNameInput.value = "";
 
-            if(errorColor) {
+            if (errorColor) {
               errorColor = false;
               cityNameInput.style.borderColor = "#808080";
             }
@@ -27,7 +25,7 @@ function getCity(city) {
             getWeatherData(data[0].lat, data[0].lon);
             saveRecentSearches(data[0].name + ", " + data[0].state);
           } else {
-            var instance = tippy(cityNameInput);
+            let instance = tippy(cityNameInput);
             instance.setProps({
               arrow: true,
               placement: "bottom",
@@ -36,7 +34,7 @@ function getCity(city) {
               theme: "error",
             });
             instance.show();
-            if(!errorColor) {
+            if (!errorColor) {
               cityNameInput.style.borderColor = "#d44d35";
               errorColor = true;
             }
@@ -52,7 +50,7 @@ function getCity(city) {
 }
 
 function getWeatherData(lat, lon) {
-  var apiUrl =
+  const apiUrl =
     "https://api.openweathermap.org/data/2.5/onecall?lat=" +
     lat +
     "&lon=" +
@@ -76,17 +74,17 @@ function getWeatherData(lat, lon) {
 }
 
 function buttonClick(event) {
-  var target = event.target;
+  const target = event.target;
 
   if (target.matches("#city-search")) {
-    var city = cityNameInput.value.trim();
+    const city = cityNameInput.value.trim();
     if (city) {
       getCity(city);
     }
   }
 
   if (target.matches(".recent-btn")) {
-    var getClickedCity = target.innerHTML;
+    const getClickedCity = target.innerHTML;
 
     getCity(getClickedCity);
   }
@@ -103,7 +101,7 @@ function saveRecentSearches(city) {
   }
 }
 
-var loadRecentSearches = function () {
+function loadRecentSearches() {
   if (!localStorage.length) {
     return;
   }
@@ -111,13 +109,13 @@ var loadRecentSearches = function () {
   recentSearchesData = JSON.parse(localStorage.getItem("recentSearches"));
 
   displayRecentButtons();
-};
+}
 
 function displayRecentButtons() {
-  var reversedData = [...recentSearchesData];
+  let reversedData = [...recentSearchesData];
   reversedData.reverse();
 
-  var recentSearchesCont = document.getElementById("recent-searches");
+  const recentSearchesCont = document.getElementById("recent-searches");
 
   if (recentSearchesCont) {
     recentSearchesCont.innerHTML = "";
@@ -127,9 +125,9 @@ function displayRecentButtons() {
     recentSearchesCont.className = "recent-searches";
   }
 
-  for (var i = 0; i < recentSearchesData.length; i++) {
-    var button = document.createElement("button");
-    var buttonText = reversedData[i];
+  for (i = 0; i < recentSearchesData.length; i++) {
+    const button = document.createElement("button");
+    let buttonText = reversedData[i];
     button.type = "submit";
     button.className = "recent-btn";
     button.textContent = buttonText;
@@ -141,34 +139,34 @@ function displayCurrentResults() {
   $(".results-container").removeClass("hide");
   $(".welcome-screen").addClass("hide");
 
-  var getCityName = document.getElementById("card-title");
-  var date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
+  const getCityName = document.getElementById("card-title");
+  const date = moment.unix(weatherData.current.dt).format("MM/DD/YYYY");
 
   getCityName.textContent = "Viewing weather for " + cityData[0].name + ", " + cityData[0].state + " (" + date + ")";
 
-  var currentIcon = document.getElementById("current-icon");
+  const currentIcon = document.getElementById("current-icon");
 
   if (currentIcon) {
     currentIcon.innerHTML = "";
   }
 
-  var weatherIconId = weatherData.current.weather[0].icon;
+  const weatherIconId = weatherData.current.weather[0].icon;
 
-  var img = document.createElement("img");
+  const img = document.createElement("img");
   img.src = "https://openweathermap.org/img/w/" + weatherIconId + ".png";
   currentIcon.appendChild(img);
 
-  var p = document.createElement("p");
+  const p = document.createElement("p");
   p.textContent = weatherData.current.weather[0].main;
   currentIcon.appendChild(p);
 
-  var currentForecast = document.getElementById("current-body");
+  const currentForecast = document.getElementById("current-body");
 
   if (currentForecast) {
     currentForecast.innerHTML = "";
   }
 
-  var currentTemp = document.createElement("h5");
+  const currentTemp = document.createElement("h5");
   currentTemp.textContent =
     "H:" +
     Math.round(weatherData.daily[0].feels_like.day) +
@@ -177,16 +175,16 @@ function displayCurrentResults() {
     "°";
   currentForecast.appendChild(currentTemp);
 
-  var currentWind = document.createElement("h5");
+  const currentWind = document.createElement("h5");
   currentWind.textContent = "Wind: " + Math.round(10 * weatherData.current.wind_speed) / 10 + " MPH";
   currentForecast.appendChild(currentWind);
 
-  var currentHumidity = document.createElement("h5");
+  const currentHumidity = document.createElement("h5");
   currentHumidity.textContent = "Humidity: " + weatherData.current.humidity + "%";
   currentForecast.appendChild(currentHumidity);
 
-  var currentIndex = document.createElement("h5");
-  var index = weatherData.current.uvi;
+  const currentIndex = document.createElement("h5");
+  let index = weatherData.current.uvi;
   if (index <= 3) {
     currentIndex.innerHTML = "UV Index: <span class='badge bg-success'>" + index + "</span>";
   } else if (index <= 6) {
@@ -199,34 +197,34 @@ function displayCurrentResults() {
 }
 
 function displayFutureForecast() {
-  for (var i = 1; i <= 5; i++) {
-    var header = document.getElementById("forecast-header-" + i);
-    var date = moment.unix(weatherData.daily[i].dt).format("MM/DD/YYYY");
+  for (i = 1; i <= 5; i++) {
+    const header = document.getElementById("forecast-header-" + i);
+    const date = moment.unix(weatherData.daily[i].dt).format("MM/DD/YYYY");
     header.textContent = date;
 
-    var icon = document.getElementById("forecast-icon-" + i);
+    const icon = document.getElementById("forecast-icon-" + i);
 
     if (icon) {
       icon.innerHTML = "";
     }
 
-    var weatherIconId = weatherData.daily[i].weather[0].icon;
+    const weatherIconId = weatherData.daily[i].weather[0].icon;
 
-    var img = document.createElement("img");
+    const img = document.createElement("img");
     img.src = "https://openweathermap.org/img/w/" + weatherIconId + ".png";
     icon.appendChild(img);
 
-    var p = document.createElement("p");
+    const p = document.createElement("p");
     p.textContent = weatherData.daily[i].weather[0].main;
     icon.appendChild(p);
 
-    var body = document.getElementById("forecast-body-" + i);
+    const body = document.getElementById("forecast-body-" + i);
 
     if (body) {
       body.innerHTML = "";
     }
 
-    var temp = document.createElement("h5");
+    const temp = document.createElement("h5");
     temp.className = "card-text";
     temp.textContent =
       "H:" +
@@ -236,12 +234,12 @@ function displayFutureForecast() {
       "°";
     body.appendChild(temp);
 
-    var wind = document.createElement("h5");
+    const wind = document.createElement("h5");
     wind.className = "card-text";
     wind.textContent = "Wind: " + Math.round(10 * weatherData.daily[i].wind_speed) / 10 + "MPH";
     body.appendChild(wind);
 
-    var humidity = document.createElement("h5");
+    const humidity = document.createElement("h5");
     humidity.className = "card-text";
     humidity.textContent = "Humidity: " + weatherData.daily[i].humidity + "%";
     body.appendChild(humidity);
